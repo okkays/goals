@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PlotKind, plotKinds } from '../plot-kind';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-plot',
@@ -9,6 +10,7 @@ import { PlotKind, plotKinds } from '../plot-kind';
 export class PlotComponent implements OnInit {
   @Input() xAxis!: Array<number>;
   @Input() plotKind!: PlotKind;
+  chart: Chart;
 
   constructor() {}
 
