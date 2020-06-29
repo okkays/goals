@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { map, delay } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { ChartConfiguration } from 'chart.js';
-import { colorizeDatasets } from '../colorscheme';
+import { ElevationSummary } from '../club-elevation-data';
 
 @Component({
   selector: 'app-everest',
@@ -12,6 +12,7 @@ import { colorizeDatasets } from '../colorscheme';
 })
 export class EverestComponent implements OnInit {
   clubIdObs: Observable<number>;
+  clubSummaryData: Observable<ElevationSummary[]>;
   chartConfigurationObs: Observable<ChartConfiguration>;
 
   constructor(route: ActivatedRoute) {
@@ -19,42 +20,10 @@ export class EverestComponent implements OnInit {
       map((params) => Number(params.get('clubId')))
     );
 
-    const clubData = [
+    this.clubSummaryData = of([
       { name: 'Robert', elevation: 234 },
       { name: 'Everest', elevation: 8848 },
-    ];
-
-    const labels = clubData.map((d) => d.name);
-    const elevations = clubData.map((d) => d.elevation);
-
-    const datasets = [
-      {
-        data: elevations,
-        label: 'Elevation (meters)',
-      },
-    ];
-
-    colorizeDatasets(datasets);
-
-    this.chartConfigurationObs = of({
-      type: 'bar',
-      data: {
-        labels,
-        datasets,
-      },
-      options: {
-        scales: {
-          yAxes: [
-            {
-              scaleLabel: {
-                display: true,
-                labelString: 'Elevation (meters)',
-              },
-            },
-          ],
-        },
-      },
-    }).pipe(delay(1000));
+    ]);
   }
 
   ngOnInit(): void {}

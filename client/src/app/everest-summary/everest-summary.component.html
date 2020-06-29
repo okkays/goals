@@ -1,0 +1,11 @@
+<mat-card>
+  <mat-card-title>Everest Progress Summary</mat-card-title>
+  <ng-container
+    *ngIf="chartConfigurationObs | async as chartConfiguration; else loading">
+    <app-chart [chartConfiguration]="chartConfiguration"></app-chart>
+  </ng-container>
+</mat-card>
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template >

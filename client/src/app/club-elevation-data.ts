@@ -1,4 +1,4 @@
-export interface ClubElevationSummary {
+export interface ElevationSummary {
   /** Athlete name. */
   name: string;
   /** Total elevation in meters */
@@ -6,5 +6,5 @@ export interface ClubElevationSummary {
 }
 
 export interface ClubElevationData {
-  summary: ClubElevationSummary[];
+  summary: ElevationSummary[];
 }
