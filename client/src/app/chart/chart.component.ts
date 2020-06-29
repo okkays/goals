@@ -7,6 +7,9 @@ import {
 } from '@angular/core';
 import { Chart, ChartConfiguration } from 'chart.js';
 
+Chart.defaults.global.responsive = true;
+Chart.defaults.global.maintainAspectRatio = false;
+
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',

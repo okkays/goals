@@ -4,6 +4,7 @@ import { colorizeDatasets } from '../colorscheme';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ChartConfiguration } from 'chart.js';
+import { chartColors } from '../colorscheme';
 
 @Component({
   selector: 'app-everest-summary',
@@ -35,8 +36,18 @@ export class EverestSummaryComponent implements OnInit {
       },
       options: {
         scales: {
+          xAxes: [
+            {
+              gridLines: {
+                color: chartColors.colors.blueGrey,
+              },
+            },
+          ],
           yAxes: [
             {
+              gridLines: {
+                color: chartColors.colors.blueGrey,
+              },
               scaleLabel: {
                 display: true,
                 labelString: 'Elevation (meters)',
