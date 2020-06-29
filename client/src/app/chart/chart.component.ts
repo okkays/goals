@@ -1,4 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  Input,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { Chart, ChartConfiguration } from 'chart.js';
 
 @Component({
@@ -6,16 +12,22 @@ import { Chart, ChartConfiguration } from 'chart.js';
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css'],
 })
-export class ChartComponent implements OnInit {
+export class ChartComponent implements AfterViewInit {
   @Input() chartConfiguration!: ChartConfiguration;
-  chart: Chart;
+  chart?: Chart;
+
+  @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
 
   constructor() {}
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
+    if (!this.canvas) {
+      throw new TypeError("Canvas didn't load in time");
+    }
     if (!this.chartConfiguration) {
       throw new TypeError('Must specify a chart configuration.');
     }
-    this.chart = new Chart('canvas', this.chartConfiguration);
+    const context = this.canvas.nativeElement.getContext('2d');
+    this.chart = new Chart(context, this.chartConfiguration);
   }
 }

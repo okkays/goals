@@ -24,6 +24,27 @@ describe('ChartComponent', () => {
   });
 
   it('should fail to create with missing config', () => {
-    expect(() => fixture.detectChanges()).toThrowError();
+    expect(() => component.ngOnChanges()).toThrowError();
+  });
+
+  it('should show a chart', () => {
+    fixture.detectChanges();
+    component.chartConfiguration = {
+      type: 'scatter',
+      data: {
+        datasets: [
+          {
+            data: [
+              {
+                x: 10,
+                y: 20,
+              },
+            ],
+          },
+        ],
+      },
+    };
+    component.ngOnChanges();
+    expect(document.querySelector('canvas svg')).toBeTruthy();
   });
 });
