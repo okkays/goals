@@ -1,3 +1,6 @@
+import { ChartDataSets } from 'chart.js';
+import * as _ from 'underscore';
+
 /** Stolen from https://material.angularjs.org/1.1.0/demo/colors */
 export const chartColors = {
   primary: '#8BC34A',
@@ -25,3 +28,10 @@ export const chartColors = {
     blueGrey: '#607D8B',
   },
 };
+
+export function colorizeDatasets(datasets: ChartDataSets[]) {
+  const colorSource = _.sample(chartColors.colors, datasets.length);
+  for (const [index, dataset] of Object.entries(datasets)) {
+    dataset.backgroundColor = colorSource[index];
+  }
+}

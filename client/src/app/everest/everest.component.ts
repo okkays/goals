@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, delay } from 'rxjs/operators';
 import { ChartConfiguration } from 'chart.js';
+import { colorizeDatasets } from '../colorscheme';
 
 @Component({
   selector: 'app-everest',
@@ -26,15 +27,20 @@ export class EverestComponent implements OnInit {
     const labels = clubData.map((d) => d.name);
     const elevations = clubData.map((d) => d.elevation);
 
+    const datasets = [
+      {
+        data: elevations,
+        label: 'Elevation (meters)',
+      },
+    ];
+
+    colorizeDatasets(datasets);
+
     this.chartConfigurationObs = of({
       type: 'bar',
       data: {
         labels,
-        datasets: [
-          {
-            data: elevations,
-          },
-        ],
+        datasets,
       },
       options: {
         scales: {

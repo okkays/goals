@@ -10,7 +10,12 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
 mat-spinner {
   margin-left: auto;
   margin-right: auto;
+}
+
+mat-card {
+  margin-bottom: 15px;
 }
