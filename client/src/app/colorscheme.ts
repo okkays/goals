@@ -1,4 +1,4 @@
-import { ChartDataSets } from 'chart.js';
+import { Chart, ChartDataSets } from 'chart.js';
 import * as _ from 'underscore';
 
 /** Stolen from https://material.angularjs.org/1.1.0/demo/colors */
@@ -35,3 +35,5 @@ export function colorizeDatasets(datasets: ChartDataSets[]) {
     dataset.backgroundColor = colorSource[index];
   }
 }
+
+Chart.defaults.global.defaultFontColor = '#FFF';
