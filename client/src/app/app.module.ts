@@ -12,6 +12,7 @@ import { EverestSummaryComponent } from './everest-summary/everest-summary.compo
 import { StravaService } from './strava.service';
 import { StravaHttpService } from './strava-http.service';
 import { ElevationService } from './elevation.service';
+import { StravaMockService } from './strava-mock.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { ElevationService } from './elevation.service';
       provide: StravaService,
       deps: [HttpClient],
       useFactory: (httpClient: HttpClient) => {
-        return new StravaHttpService(httpClient);
+        //return new StravaHttpService(httpClient);
+        return new StravaMockService();
       },
     },
     {

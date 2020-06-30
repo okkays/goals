@@ -16,10 +16,14 @@ export class ElevationService {
   ): Observable<ElevationSummary[]> {
     const elevationMap = new Map<number, number>();
     for (const activity of clubActivities) {
-      elevationMap.set(activity.athlete.id, activity.total_elevation_gain);
+      const gain = elevationMap.get(activity.athlete.id) || 0;
+      elevationMap.set(
+        activity.athlete.id,
+        gain + activity.total_elevation_gain
+      );
     }
     return of(
-      Array.from(elevationMap.entries()).map((athleteId, elevation) => {
+      Array.from(elevationMap.entries()).map(([athleteId, elevation]) => {
         return { name: athleteId.toString(), elevation };
       })
     );
