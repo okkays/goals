@@ -1,11 +1,11 @@
 <mat-card>
   <mat-card-title>Club Details</mat-card-title>
   <ng-container>
-    Super Cool Group #{{clubIdObs | async}}
+    Super Cool Group #{{idObs | async}}
   </ng-container>
 </mat-card>
 
-<app-everest-summary [dataObs]="clubSummaryData"></app-everest-summary>
+<app-everest-summary [dataObs]="elevationSummaryData"></app-everest-summary>
 
 <ng-template #loading>
   <mat-spinner></mat-spinner>

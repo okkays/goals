@@ -4,6 +4,7 @@ import { EverestComponent } from './everest/everest.component';
 
 const routes: Routes = [
   { path: 'club/:clubId/everest', component: EverestComponent },
+  { path: '**', redirectTo: 'club/123/everest' },
 ];
 
 @NgModule({

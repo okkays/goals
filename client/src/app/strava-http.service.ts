@@ -4,6 +4,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { SummaryActivity } from './strava';
 import { Observable } from 'rxjs';
 
+const API = 'https://www.strava.com/api/v3';
+
 function toParams(options?: Record<string, unknown | unknown[]>) {
   if (!options) {
     return new HttpParams();
@@ -35,8 +37,11 @@ export class StravaHttpService extends StravaService {
     options?: { page?: number; per_page?: number }
   ): Observable<SummaryActivity[]> {
     const params = toParams(options);
-    return this.httpClient.get<SummaryActivity[]>(`/clubs/${id}/activities`, {
-      params,
-    });
+    return this.httpClient.get<SummaryActivity[]>(
+      `${API}/clubs/${id}/activities`,
+      {
+        params,
+      }
+    );
   }
 }
