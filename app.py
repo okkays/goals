@@ -1,4 +1,4 @@
-from flask import Flask
+import flask
 import requests
 from dotenv import load_dotenv
 import os
@@ -8,7 +8,7 @@ STRAVA_CLIENT_SECRET = os.getenv('STRAVA_CLIENT_SECRET')
 
 load_dotenv()
 
-app = Flask(__name__)
+app = flask.Flask(__name__)
 
 
 @app.route("/")
@@ -20,8 +20,9 @@ def hello():
 def login():
   redirect_uri = 'http://localhost:5000/oauth2/strava'
   scope = 'activity:read'
-  flask.redirect('https://www.strava.com/oauth/authorize?' +
-                 f'client_id={STRAVA_CLIENT_ID}&redirect_uri={redirect_uri}' +
+  return flask.redirect('https://www.strava.com/oauth/authorize?' +
+                 f'client_id={STRAVA_CLIENT_ID}' +
+                 f'&redirect_uri={redirect_uri}' +
                  f'&response_type=code&scope={scope}')
 
 
@@ -32,10 +33,11 @@ def oauth2_strava():
     flask.abort(502, error)
   code = flask.request.args.get('code')
   scope = flask.request.args.get('scope')
-  secret = requests.post('https://www.strava.com/oauth/token',
+  secret_response = requests.post('https://www.strava.com/oauth/token',
                          {
                              'client_id': STRAVA_CLIENT_ID,
                              'client_secret': STRAVA_CLIENT_SECRET,
                              'code': code,
                              'grant_type': 'authorization_code',
                          })
+  return flask.jsonify(secret_response.json())
