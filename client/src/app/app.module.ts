@@ -13,6 +13,7 @@ import { StravaService } from './strava.service';
 import { StravaHttpService } from './strava-http.service';
 import { ElevationService } from './elevation.service';
 import { StravaMockService } from './strava-mock.service';
+import { FlaskService } from './flask.service';
 
 @NgModule({
   declarations: [
@@ -30,11 +31,17 @@ import { StravaMockService } from './strava-mock.service';
   ],
   providers: [
     {
-      provide: StravaService,
+      provide: FlaskService,
       deps: [HttpClient],
       useFactory: (httpClient: HttpClient) => {
-        //return new StravaHttpService(httpClient);
-        return new StravaMockService();
+        return new FlaskService(httpClient);
+      },
+    },
+    {
+      provide: StravaService,
+      deps: [HttpClient, FlaskService],
+      useFactory: (httpClient: HttpClient, flaskService: FlaskService) => {
+        return new StravaHttpService(httpClient, flaskService);
       },
     },
     {

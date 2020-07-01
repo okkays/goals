@@ -143,3 +143,49 @@ export declare interface SummaryActivity {
   /** Similar to Normalized Power. Rides with power meter data onlySummaryActivity. */
   weighted_average_watts: number;
 }
+
+export declare interface AuthResult {
+  token_type: string;
+  expires_at: number;
+  expires_in: number;
+  refresh_token: string;
+  access_token: string;
+  athlete: SummaryAthlete;
+}
+
+export declare interface SummaryAthlete {
+  /** The unique identifier of the athlete. */
+  id: number;
+  /**
+   * Resource state, indicates level of detail.
+   * Possible values: 1 -> "meta", 2 -> "summary", 3 -> "detail".
+   */
+  resource_state: number;
+  /** The athlete's first name. */
+  firstname: string;
+  /** The athlete's last name. */
+  lastname: string;
+  /** URL to a 62x62 pixel profile picture. */
+  profile_medium: string;
+  /** URL to a 124x124 pixel profile picture. */
+  profile: string;
+  /** The athlete's city. */
+  city: string;
+  /** The athlete's state or geographical region. */
+  state: string;
+  /** The athlete's country. */
+  country: string;
+  /** The athlete's sex. May take one of the following values: M, F. */
+  sex: string;
+  /**
+   * Deprecated.  Use summit field instead.
+   * Whether the athlete has any Summit subscription.
+   */
+  premium: boolean;
+  /** Whether the athlete has any Summit subscription. */
+  summit: boolean;
+  /** The time at which the athlete was created. */
+  created_at: string;
+  /** The time at which the athlete was last updated. */
+  updated_at: string;
+}

@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 import time
 import urllib
+import flask_cors
 
 STRAVA_CLIENT_ID = os.getenv('STRAVA_CLIENT_ID')
 STRAVA_CLIENT_SECRET = os.getenv('STRAVA_CLIENT_SECRET')
@@ -11,6 +12,10 @@ STRAVA_CLIENT_SECRET = os.getenv('STRAVA_CLIENT_SECRET')
 load_dotenv()
 
 app = flask.Flask(__name__)
+flask_cors.CORS(app,
+                allow_headers='*',
+                origins=['http://localhost:4200'],
+                supports_credentials=True)
 
 # Set the secret key to enable session.
 app.secret_key = os.urandom(24)
@@ -27,6 +32,12 @@ window.close()
 </script>
 You may now close this window.
 """
+
+@app.before_request
+def debug():
+  print(flask.session.get('secret'))
+  print(flask.session.get('token'))
+
 
 @app.route("/login", methods=['GET'])
 def login():
@@ -59,10 +70,10 @@ def secret():
 def refresh_token(old_secret):
   secret = requests.post('https://www.strava.com/oauth/token',
                          {
-                           'client_id': STRAVA_CLIENT_ID,
-                           'client_secret': STRAVA_CLIENT_SECRET,
-                           'grant_type': 'refresh_token',
-                           'refresh_token': old_secret.get('refresh_token'),
+                             'client_id': STRAVA_CLIENT_ID,
+                             'client_secret': STRAVA_CLIENT_SECRET,
+                             'grant_type': 'refresh_token',
+                             'refresh_token': old_secret.get('refresh_token'),
                          })
   if 'errors' in secret:
     flask.abort(400, secret.get('message', 'Unknown Error'))
@@ -86,7 +97,10 @@ def oauth2_strava():
   error = flask.request.args.get('error')
   if error:
     flask.abort(502, error)
-  state = flask.request.args.get('state', '')
+  token = flask.request.args.get('state')
+  if not token:
+    flask.abort(500, 'state was not present in oauth response')
+  token = urllib.parse.unquote_plus(token)
   code = flask.request.args.get('code')
   scope = flask.request.args.get('scope')
   secret = requests.post('https://www.strava.com/oauth/token',
@@ -99,4 +113,5 @@ def oauth2_strava():
   if 'errors' in secret:
     flask.abort(400, secret.get('message', 'Unknown Error'))
   flask.session['secret'] = secret
+  flask.session['token'] = token
   return you_may_close
