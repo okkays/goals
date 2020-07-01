@@ -18,7 +18,7 @@ function toParams(options?: Record<string, unknown | unknown[]>) {
         }
         return httpParams;
       }
-      return httpParams.set(key, value.toString());
+      return httpParams.set(key, String(value));
     },
     new HttpParams()
   );

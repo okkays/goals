@@ -31,6 +31,9 @@ export class ChartComponent implements AfterViewInit {
       throw new TypeError('Must specify a chart configuration.');
     }
     const context = this.canvas.nativeElement.getContext('2d');
+    if (!context) {
+      throw new TypeError("Couldn't get the canvas context");
+    }
     this.chart = new Chart(context, this.chartConfiguration);
   }
 }
