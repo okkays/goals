@@ -1,6 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClient,
+  HttpClientModule,
+} from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,7 +17,7 @@ import { StravaService } from './strava.service';
 import { StravaHttpService } from './strava-http.service';
 import { ElevationService } from './elevation.service';
 import { StravaMockService } from './strava-mock.service';
-import { FlaskService } from './flask.service';
+import { StravaAuthInterceptor } from './strava-auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -31,17 +35,10 @@ import { FlaskService } from './flask.service';
   ],
   providers: [
     {
-      provide: FlaskService,
+      provide: StravaService,
       deps: [HttpClient],
       useFactory: (httpClient: HttpClient) => {
-        return new FlaskService(httpClient);
-      },
-    },
-    {
-      provide: StravaService,
-      deps: [HttpClient, FlaskService],
-      useFactory: (httpClient: HttpClient, flaskService: FlaskService) => {
-        return new StravaHttpService(httpClient, flaskService);
+        return new StravaHttpService(httpClient);
       },
     },
     {
@@ -50,6 +47,11 @@ import { FlaskService } from './flask.service';
       useFactory: (stravaService: StravaService) => {
         return new ElevationService(stravaService);
       },
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: StravaAuthInterceptor,
+      multi: true,
     },
   ],
   bootstrap: [AppComponent],
