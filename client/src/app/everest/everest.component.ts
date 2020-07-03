@@ -28,11 +28,6 @@ export class EverestComponent implements OnInit {
     );
 
     this.elevationSummaryData = this.elevationData.pipe(pluck('summary'));
-
-    // this.clubSummaryData = of([
-    //   { name: 'Robert', elevation: 234 },
-    //   { name: 'Everest', elevation: 8848 },
-    // ]);
   }
 
   ngOnInit(): void {}
