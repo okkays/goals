@@ -4,6 +4,7 @@ import { ClubElevationData, ElevationSummary } from './club-elevation-data';
 import { Observable, of } from 'rxjs';
 import { map, flatMap } from 'rxjs/operators';
 import { SummaryActivity } from './strava';
+import { athleteNameFromActivity } from './strava-util';
 
 @Injectable({
   providedIn: 'root',
@@ -14,17 +15,15 @@ export class ElevationService {
   private getSummary(
     clubActivities: SummaryActivity[]
   ): Observable<ElevationSummary[]> {
-    const elevationMap = new Map<number, number>();
+    const elevationMap = new Map<string, number>();
     for (const activity of clubActivities) {
-      const gain = elevationMap.get(activity.athlete.id) || 0;
-      elevationMap.set(
-        activity.athlete.id,
-        gain + activity.total_elevation_gain
-      );
+      const athleteName = athleteNameFromActivity(activity);
+      const gain = elevationMap.get(athleteName) || 0;
+      elevationMap.set(athleteName, gain + activity.total_elevation_gain);
     }
     return of(
-      Array.from(elevationMap.entries()).map(([athleteId, elevation]) => {
-        return { name: athleteId.toString(), elevation };
+      Array.from(elevationMap.entries()).map(([athleteName, elevation]) => {
+        return { name: athleteName.toString(), elevation };
       })
     );
   }

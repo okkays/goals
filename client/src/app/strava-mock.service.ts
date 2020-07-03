@@ -17,10 +17,30 @@ export class StravaMockService extends StravaService {
     options?: { page?: number; per_page?: number }
   ): Observable<SummaryActivity[]> {
     return of([
-      { athlete: { id: 1 }, total_elevation_gain: 24 } as SummaryActivity,
-      { athlete: { id: 1 }, total_elevation_gain: 51 } as SummaryActivity,
-      { athlete: { id: 2 }, total_elevation_gain: 300 } as SummaryActivity,
-      { athlete: { id: 3 }, total_elevation_gain: 153 } as SummaryActivity,
+      {
+        athlete: {
+          lastname: 'Hollinger',
+          firstname: 'Coach',
+          resource_state: 2,
+        },
+        total_elevation_gain: 24,
+      } as SummaryActivity,
+      {
+        athlete: {
+          lastname: 'Hamilton',
+          firstname: 'Colby',
+          resource_state: 2,
+        },
+        total_elevation_gain: 51,
+      } as SummaryActivity,
+      {
+        athlete: { lastname: 'Linden', firstname: 'Alex', resource_state: 2 },
+        total_elevation_gain: 300,
+      } as SummaryActivity,
+      {
+        athlete: { lastname: 'Kays', firstname: 'Kevin', resource_state: 2 },
+        total_elevation_gain: 153,
+      } as SummaryActivity,
     ]);
   }
 }

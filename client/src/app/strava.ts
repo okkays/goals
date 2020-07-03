@@ -49,7 +49,9 @@ export type ActivityType = typeof activityTypes[number];
 
 export declare interface MetaAthlete {
   /** The unique identifier of the athlete. */
-  id: number;
+  firstname: string;
+  lastname: string;
+  resource_state: number;
 }
 
 export declare interface PolylineMap {
