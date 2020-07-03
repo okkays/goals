@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { map, flatMap, pluck } from 'rxjs/operators';
+import { map, flatMap, pluck, shareReplay } from 'rxjs/operators';
 import { ChartConfiguration } from 'chart.js';
 import { ElevationSummary, ClubElevationData } from '../club-elevation-data';
 import { ElevationService } from '../elevation.service';
@@ -23,7 +23,8 @@ export class EverestComponent implements OnInit {
     this.elevationData = this.idObs.pipe(
       flatMap((id) => {
         return elevationService.elevationByMember(id);
-      })
+      }),
+      shareReplay(1)
     );
 
     this.elevationSummaryData = this.elevationData.pipe(pluck('summary'));

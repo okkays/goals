@@ -17,12 +17,17 @@ export class EverestSummaryComponent implements OnInit {
 
   private getConfig(data: ElevationSummary[]): ChartConfiguration {
     const labels = data.map((d) => d.name);
-    const elevations = data.map((d) => d.elevation);
+    const runElevations = data.map((d) => d.gains.get('Run') || 0);
+    const rideElevations = data.map((d) => d.gains.get('Ride') || 0);
 
     const datasets = [
       {
-        data: elevations,
-        label: 'Elevation (meters)',
+        data: runElevations,
+        label: 'Run',
+      },
+      {
+        data: rideElevations,
+        label: 'Ride',
       },
     ];
 

@@ -3,8 +3,12 @@ import { StravaService } from './strava.service';
 import { ClubElevationData, ElevationSummary } from './club-elevation-data';
 import { Observable, of } from 'rxjs';
 import { map, flatMap } from 'rxjs/operators';
-import { SummaryActivity } from './strava';
-import { athleteNameFromActivity } from './strava-util';
+import { SummaryActivity, ActivityType } from './strava';
+import {
+  athleteNameFromActivity,
+  ActivityFilters,
+  filterActivities,
+} from './strava-util';
 
 @Injectable({
   providedIn: 'root',
@@ -15,15 +19,20 @@ export class ElevationService {
   private getSummary(
     clubActivities: SummaryActivity[]
   ): Observable<ElevationSummary[]> {
-    const elevationMap = new Map<string, number>();
+    const elevationMap = new Map<string, Map<ActivityType, number>>();
     for (const activity of clubActivities) {
       const athleteName = athleteNameFromActivity(activity);
-      const gain = elevationMap.get(athleteName) || 0;
-      elevationMap.set(athleteName, gain + activity.total_elevation_gain);
+      let gains = elevationMap.get(athleteName);
+      if (!gains) {
+        gains = new Map<ActivityType, number>();
+        elevationMap.set(athleteName, gains);
+      }
+      const activityGain = gains.get(activity.type) || 0;
+      gains.set(activity.type, activityGain + activity.total_elevation_gain);
     }
     return of(
-      Array.from(elevationMap.entries()).map(([athleteName, elevation]) => {
-        return { name: athleteName.toString(), elevation };
+      Array.from(elevationMap.entries()).map(([athleteName, gains]) => {
+        return { name: athleteName.toString(), gains };
       })
     );
   }
