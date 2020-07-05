@@ -17,12 +17,12 @@ export class ClubComponent implements OnInit {
   elevationSummaryData: Observable<FieldSummary[]>;
   chartConfigurationObs: Observable<ChartConfiguration>;
 
-  constructor(route: ActivatedRoute, elevationService: SummaryService) {
+  constructor(route: ActivatedRoute, summaryService: SummaryService) {
     this.idObs = route.paramMap.pipe(map((params) => Number(params.get('id'))));
 
     this.elevationByTypeAndMember = this.idObs.pipe(
       flatMap((id) => {
-        return elevationService.elevationByMember(id);
+        return summaryService.fieldByMember(id, 'total_elevation_gain');
       }),
       shareReplay(1)
     );

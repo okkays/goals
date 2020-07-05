@@ -15,6 +15,7 @@ import { activityTypes, ActivityType } from '../strava';
 export class FieldSummaryComponent implements OnInit {
   @Input() dataObs!: Observable<FieldSummary[]>;
   chartConfigurationObs: Observable<ChartConfiguration>;
+  @Input() scaleLabel: string;
 
   private getConfig(data: FieldSummary[]): ChartConfiguration {
     const labels = data.map((d) => d.name);
@@ -22,7 +23,7 @@ export class FieldSummaryComponent implements OnInit {
       .map((activityType) => {
         return {
           label: activityType,
-          data: data.map((d) => d.gains.get(activityType)),
+          data: data.map((d) => d.totals.get(activityType)),
         };
       })
       .filter((dataset) => {
@@ -52,8 +53,8 @@ export class FieldSummaryComponent implements OnInit {
                 color: chartColors.colors.blueGrey,
               },
               scaleLabel: {
-                display: true,
-                labelString: 'Elevation (meters)',
+                display: !!this.scaleLabel,
+                labelString: this.scaleLabel,
               },
             },
           ],
@@ -64,7 +65,7 @@ export class FieldSummaryComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.dataObs) {
-      throw new TypeError('Must provide an ElevationSummary[] dataObs.');
+      throw new TypeError('Must provide a FieldSummary[] dataObs.');
     }
     this.chartConfigurationObs = this.dataObs.pipe(
       map((data) => this.getConfig(data))

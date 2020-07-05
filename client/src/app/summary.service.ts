@@ -5,6 +5,7 @@ import { FieldSummary } from './club-data';
 import { ActivityType, SummaryActivity } from './strava';
 import { athleteNameFromActivity } from './strava-util';
 import { StravaService } from './strava.service';
+import { PropertyOfType } from './common-util';
 
 @Injectable({
   providedIn: 'root',
@@ -13,30 +14,34 @@ export class SummaryService {
   constructor(private readonly stravaService: StravaService) {}
 
   private getSummary(
-    clubActivities: SummaryActivity[]
+    clubActivities: SummaryActivity[],
+    field: PropertyOfType<SummaryActivity, number>
   ): Observable<FieldSummary[]> {
-    const elevationMap = new Map<string, Map<ActivityType, number>>();
+    const fieldMap = new Map<string, Map<ActivityType, number>>();
     for (const activity of clubActivities) {
       const athleteName = athleteNameFromActivity(activity);
-      let gains = elevationMap.get(athleteName);
-      if (!gains) {
-        gains = new Map<ActivityType, number>();
-        elevationMap.set(athleteName, gains);
+      let activityTotals = fieldMap.get(athleteName);
+      if (!activityTotals) {
+        activityTotals = new Map<ActivityType, number>();
+        fieldMap.set(athleteName, activityTotals);
       }
-      const activityGain = gains.get(activity.type) || 0;
-      gains.set(activity.type, activityGain + activity.total_elevation_gain);
+      const activityTotal = activityTotals.get(activity.type) || 0;
+      activityTotals.set(activity.type, activityTotal + activity[field]);
     }
     return of(
-      Array.from(elevationMap.entries()).map(([athleteName, gains]) => {
-        return { name: athleteName.toString(), gains };
+      Array.from(fieldMap.entries()).map(([athleteName, totals]) => {
+        return { name: athleteName.toString(), totals };
       })
     );
   }
 
-  elevationByMember(clubId: number): Observable<FieldSummary[]> {
+  fieldByMember(
+    clubId: number,
+    field: PropertyOfType<SummaryActivity, number>
+  ): Observable<FieldSummary[]> {
     return this.stravaService.getClubActivitiesById(clubId).pipe(
       flatMap((clubActivities) => {
-        return this.getSummary(clubActivities);
+        return this.getSummary(clubActivities, field);
       })
     );
   }

@@ -5,7 +5,10 @@
   </ng-container>
 </mat-card>
 
-<app-field-summary [dataObs]="elevationByTypeAndMember"></app-field-summary>
+<app-field-summary
+  [dataObs]="elevationByTypeAndMember"
+  scaleLabel="Elevation (meters)"
+  ></app-field-summary>
 
 <ng-template #loading>
   <mat-spinner></mat-spinner>

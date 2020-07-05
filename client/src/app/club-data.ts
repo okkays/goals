@@ -4,5 +4,5 @@ export interface FieldSummary {
   /** Athlete name. */
   name: string;
   /** Totals of that field totalled by activity type. */
-  gains: Map<ActivityType, number>;
+  totals: Map<ActivityType, number>;
 }
