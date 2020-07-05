@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ChartConfiguration } from 'chart.js';
 import { chartColors } from '../colorscheme';
-import { activityTypes } from '../strava';
+import { activityTypes, ActivityType } from '../strava';
 
 @Component({
   selector: 'app-everest-summary',
@@ -18,19 +18,16 @@ export class EverestSummaryComponent implements OnInit {
 
   private getConfig(data: ElevationSummary[]): ChartConfiguration {
     const labels = data.map((d) => d.name);
-    const runElevations = data.map((d) => d.gains.get('Run') || 0);
-    const rideElevations = data.map((d) => d.gains.get('Ride') || 0);
-
-    const datasets = [
-      {
-        data: runElevations,
-        label: 'Run',
-      },
-      {
-        data: rideElevations,
-        label: 'Ride',
-      },
-    ];
+    const datasets = activityTypes
+      .map((activityType) => {
+        return {
+          label: activityType,
+          data: data.map((d) => d.gains.get(activityType)),
+        };
+      })
+      .filter((dataset) => {
+        return dataset.data.some((d) => d > 0);
+      });
 
     colorizeDatasets(datasets);
 

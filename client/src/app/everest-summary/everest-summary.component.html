@@ -1,5 +1,5 @@
 <mat-card>
-  <mat-card-title>Everest Progress Summary</mat-card-title>
+  <mat-card-title>Elevation Summary</mat-card-title>
   <ng-container
     *ngIf="chartConfigurationObs | async as chartConfiguration; else loading">
     <app-chart [chartConfiguration]="chartConfiguration"></app-chart>

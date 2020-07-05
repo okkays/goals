@@ -4,7 +4,7 @@ import { ClubComponent } from './club/club.component';
 
 const routes: Routes = [
   { path: 'club/:id', component: ClubComponent },
-  { path: '**', redirectTo: 'club/214176/everest' },
+  { path: '**', redirectTo: 'club/214176' },
 ];
 
 @NgModule({
