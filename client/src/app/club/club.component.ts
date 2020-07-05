@@ -24,13 +24,19 @@ export class ClubComponent implements OnInit {
   >;
   displayedFields: FieldConfig[] = [
     {
+      fieldKey: 'distance',
+      scaleLabel: 'Distance (km)',
+      // Convert meters to km.
+      transformation: (d) => d / 1000,
+    },
+    {
       fieldKey: 'total_elevation_gain',
       scaleLabel: 'Elevation (meters)',
     },
     {
       fieldKey: 'elapsed_time',
       scaleLabel: 'Elapsed Time (hours)',
-      // Convert to hours.
+      // Convert seconds to hours.
       transformation: (d) => d / 3600,
     },
   ];
