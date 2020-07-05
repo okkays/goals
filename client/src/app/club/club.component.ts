@@ -1,33 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { map, flatMap, pluck, shareReplay } from 'rxjs/operators';
 import { ChartConfiguration } from 'chart.js';
-import { ElevationSummary, ClubElevationData } from '../club-elevation-data';
+import { Observable } from 'rxjs';
+import { flatMap, map, shareReplay } from 'rxjs/operators';
+import { ElevationSummary } from '../club-elevation-data';
 import { ElevationService } from '../elevation.service';
 
 @Component({
-  selector: 'app-everest',
-  templateUrl: './everest.component.html',
-  styleUrls: ['./everest.component.css'],
+  selector: 'app-club',
+  templateUrl: './club.component.html',
+  styleUrls: ['./club.component.css'],
 })
-export class EverestComponent implements OnInit {
+export class ClubComponent implements OnInit {
   idObs: Observable<number>;
-  elevationData: Observable<ClubElevationData>;
+  elevationByTypeAndMember: Observable<ElevationSummary[]>;
   elevationSummaryData: Observable<ElevationSummary[]>;
   chartConfigurationObs: Observable<ChartConfiguration>;
 
   constructor(route: ActivatedRoute, elevationService: ElevationService) {
     this.idObs = route.paramMap.pipe(map((params) => Number(params.get('id'))));
 
-    this.elevationData = this.idObs.pipe(
+    this.elevationByTypeAndMember = this.idObs.pipe(
       flatMap((id) => {
         return elevationService.elevationByMember(id);
       }),
       shareReplay(1)
     );
-
-    this.elevationSummaryData = this.elevationData.pipe(pluck('summary'));
   }
 
   ngOnInit(): void {}

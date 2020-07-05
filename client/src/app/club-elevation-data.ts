@@ -6,7 +6,3 @@ export interface ElevationSummary {
   /** Total elevation in meters by activity type */
   gains: Map<ActivityType, number>;
 }
-
-export interface ClubElevationData {
-  summary: ElevationSummary[];
-}

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EverestComponent } from './everest.component';
+import { ClubComponent } from './club.component';
 
-describe('EverestComponent', () => {
-  let component: EverestComponent;
-  let fixture: ComponentFixture<EverestComponent>;
+describe('ClubComponent', () => {
+  let component: ClubComponent;
+  let fixture: ComponentFixture<ClubComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EverestComponent ]
+      declarations: [ ClubComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EverestComponent);
+    fixture = TestBed.createComponent(ClubComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

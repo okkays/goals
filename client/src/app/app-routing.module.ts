@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { EverestComponent } from './everest/everest.component';
+import { ClubComponent } from './club/club.component';
 
 const routes: Routes = [
-  { path: 'club/:id/everest', component: EverestComponent },
+  { path: 'club/:id', component: ClubComponent },
   { path: '**', redirectTo: 'club/214176/everest' },
 ];
 

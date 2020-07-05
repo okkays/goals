@@ -1,14 +1,10 @@
 import { Injectable } from '@angular/core';
-import { StravaService } from './strava.service';
-import { ClubElevationData, ElevationSummary } from './club-elevation-data';
 import { Observable, of } from 'rxjs';
-import { map, flatMap } from 'rxjs/operators';
-import { SummaryActivity, ActivityType } from './strava';
-import {
-  athleteNameFromActivity,
-  ActivityFilters,
-  filterActivities,
-} from './strava-util';
+import { flatMap } from 'rxjs/operators';
+import { ElevationSummary } from './club-elevation-data';
+import { ActivityType, SummaryActivity } from './strava';
+import { athleteNameFromActivity } from './strava-util';
+import { StravaService } from './strava.service';
 
 @Injectable({
   providedIn: 'root',
@@ -37,13 +33,10 @@ export class ElevationService {
     );
   }
 
-  elevationByMember(clubId: number): Observable<ClubElevationData> {
+  elevationByMember(clubId: number): Observable<ElevationSummary[]> {
     return this.stravaService.getClubActivitiesById(clubId).pipe(
       flatMap((clubActivities) => {
         return this.getSummary(clubActivities);
-      }),
-      map((summary) => {
-        return { summary };
       })
     );
   }

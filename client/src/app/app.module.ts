@@ -18,6 +18,7 @@ import { StravaHttpService } from './strava-http.service';
 import { ElevationService } from './elevation.service';
 import { StravaMockService } from './strava-mock.service';
 import { StravaAuthInterceptor } from './strava-auth.interceptor';
+import { ClubComponent } from './club/club.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { StravaAuthInterceptor } from './strava-auth.interceptor';
     ChartComponent,
     EverestComponent,
     EverestSummaryComponent,
+    ClubComponent,
   ],
   imports: [
     BrowserModule,

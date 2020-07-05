@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ChartConfiguration } from 'chart.js';
 import { chartColors } from '../colorscheme';
+import { activityTypes } from '../strava';
 
 @Component({
   selector: 'app-everest-summary',
