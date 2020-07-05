@@ -17,6 +17,7 @@ import { StravaHttpService } from './strava-http.service';
 import { SummaryService } from './summary.service';
 import { StravaMockService } from './strava-mock.service';
 import { StravaAuthInterceptor } from './strava-auth.interceptor';
+import { ReplayInterceptor } from './replay.interceptor';
 import { ClubComponent } from './club/club.component';
 
 @NgModule({
@@ -47,6 +48,11 @@ import { ClubComponent } from './club/club.component';
       useFactory: (stravaService: StravaService) => {
         return new SummaryService(stravaService);
       },
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ReplayInterceptor,
+      multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
