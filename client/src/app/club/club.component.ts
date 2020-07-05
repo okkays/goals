@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ChartConfiguration } from 'chart.js';
 import { Observable } from 'rxjs';
 import { flatMap, map, shareReplay } from 'rxjs/operators';
-import { ElevationSummary } from '../club-elevation-data';
+import { FieldSummary } from '../club-data';
 import { SummaryService } from '../summary.service';
 
 @Component({
@@ -13,8 +13,8 @@ import { SummaryService } from '../summary.service';
 })
 export class ClubComponent implements OnInit {
   idObs: Observable<number>;
-  elevationByTypeAndMember: Observable<ElevationSummary[]>;
-  elevationSummaryData: Observable<ElevationSummary[]>;
+  elevationByTypeAndMember: Observable<FieldSummary[]>;
+  elevationSummaryData: Observable<FieldSummary[]>;
   chartConfigurationObs: Observable<ChartConfiguration>;
 
   constructor(route: ActivatedRoute, elevationService: SummaryService) {

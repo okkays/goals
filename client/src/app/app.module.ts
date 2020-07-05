@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { ChartComponent } from './chart/chart.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
-import { EverestSummaryComponent } from './everest-summary/everest-summary.component';
+import { FieldSummaryComponent } from './field-summary/field-summary.component';
 import { StravaService } from './strava.service';
 import { StravaHttpService } from './strava-http.service';
 import { SummaryService } from './summary.service';
@@ -23,7 +23,7 @@ import { ClubComponent } from './club/club.component';
   declarations: [
     AppComponent,
     ChartComponent,
-    EverestSummaryComponent,
+    FieldSummaryComponent,
     ClubComponent,
   ],
   imports: [

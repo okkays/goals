@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
-import { ElevationSummary } from './club-elevation-data';
+import { FieldSummary } from './club-data';
 import { ActivityType, SummaryActivity } from './strava';
 import { athleteNameFromActivity } from './strava-util';
 import { StravaService } from './strava.service';
@@ -14,7 +14,7 @@ export class SummaryService {
 
   private getSummary(
     clubActivities: SummaryActivity[]
-  ): Observable<ElevationSummary[]> {
+  ): Observable<FieldSummary[]> {
     const elevationMap = new Map<string, Map<ActivityType, number>>();
     for (const activity of clubActivities) {
       const athleteName = athleteNameFromActivity(activity);
@@ -33,7 +33,7 @@ export class SummaryService {
     );
   }
 
-  elevationByMember(clubId: number): Observable<ElevationSummary[]> {
+  elevationByMember(clubId: number): Observable<FieldSummary[]> {
     return this.stravaService.getClubActivitiesById(clubId).pipe(
       flatMap((clubActivities) => {
         return this.getSummary(clubActivities);

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ElevationSummary } from '../club-elevation-data';
+import { FieldSummary } from '../club-data';
 import { colorizeDatasets } from '../colorscheme';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -8,15 +8,15 @@ import { chartColors } from '../colorscheme';
 import { activityTypes, ActivityType } from '../strava';
 
 @Component({
-  selector: 'app-everest-summary',
-  templateUrl: './everest-summary.component.html',
-  styleUrls: ['./everest-summary.component.css'],
+  selector: 'app-field-summary',
+  templateUrl: './field-summary.component.html',
+  styleUrls: ['./field-summary.component.css'],
 })
-export class EverestSummaryComponent implements OnInit {
-  @Input() dataObs!: Observable<ElevationSummary[]>;
+export class FieldSummaryComponent implements OnInit {
+  @Input() dataObs!: Observable<FieldSummary[]>;
   chartConfigurationObs: Observable<ChartConfiguration>;
 
-  private getConfig(data: ElevationSummary[]): ChartConfiguration {
+  private getConfig(data: FieldSummary[]): ChartConfiguration {
     const labels = data.map((d) => d.name);
     const datasets = activityTypes
       .map((activityType) => {
