@@ -14,7 +14,7 @@ import { MaterialModule } from './material/material.module';
 import { EverestSummaryComponent } from './everest-summary/everest-summary.component';
 import { StravaService } from './strava.service';
 import { StravaHttpService } from './strava-http.service';
-import { ElevationService } from './elevation.service';
+import { SummaryService } from './summary.service';
 import { StravaMockService } from './strava-mock.service';
 import { StravaAuthInterceptor } from './strava-auth.interceptor';
 import { ClubComponent } from './club/club.component';
@@ -42,10 +42,10 @@ import { ClubComponent } from './club/club.component';
       },
     },
     {
-      provide: ElevationService,
+      provide: SummaryService,
       deps: [StravaService],
       useFactory: (stravaService: StravaService) => {
-        return new ElevationService(stravaService);
+        return new SummaryService(stravaService);
       },
     },
     {

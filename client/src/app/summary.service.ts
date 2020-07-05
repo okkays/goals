@@ -9,7 +9,7 @@ import { StravaService } from './strava.service';
 @Injectable({
   providedIn: 'root',
 })
-export class ElevationService {
+export class SummaryService {
   constructor(private readonly stravaService: StravaService) {}
 
   private getSummary(

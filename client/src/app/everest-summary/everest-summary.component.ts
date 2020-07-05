@@ -26,7 +26,7 @@ export class EverestSummaryComponent implements OnInit {
         };
       })
       .filter((dataset) => {
-        return dataset.data.some((d) => d > 0);
+        return dataset.data.some((d) => d && d > 0);
       });
 
     colorizeDatasets(datasets);

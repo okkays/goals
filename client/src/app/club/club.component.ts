@@ -4,7 +4,7 @@ import { ChartConfiguration } from 'chart.js';
 import { Observable } from 'rxjs';
 import { flatMap, map, shareReplay } from 'rxjs/operators';
 import { ElevationSummary } from '../club-elevation-data';
-import { ElevationService } from '../elevation.service';
+import { SummaryService } from '../summary.service';
 
 @Component({
   selector: 'app-club',
@@ -17,7 +17,7 @@ export class ClubComponent implements OnInit {
   elevationSummaryData: Observable<ElevationSummary[]>;
   chartConfigurationObs: Observable<ChartConfiguration>;
 
-  constructor(route: ActivatedRoute, elevationService: ElevationService) {
+  constructor(route: ActivatedRoute, elevationService: SummaryService) {
     this.idObs = route.paramMap.pipe(map((params) => Number(params.get('id'))));
 
     this.elevationByTypeAndMember = this.idObs.pipe(
