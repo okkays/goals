@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FieldSummary, SummarizedField } from '../field-data';
+import { FieldSummary, FieldConfig } from '../field-data';
 import { colorizeDatasets } from '../colorscheme';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -15,7 +15,7 @@ import { activityTypes, ActivityType } from '../strava';
 export class FieldSummaryComponent implements OnInit {
   @Input() dataObs!: Observable<FieldSummary[]>;
   chartConfigurationObs: Observable<ChartConfiguration>;
-  @Input() field: SummarizedField;
+  @Input() field: FieldConfig;
 
   private getConfig(data: FieldSummary[]): ChartConfiguration {
     const labels = data.map((d) => d.name);

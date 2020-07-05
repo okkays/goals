@@ -8,7 +8,7 @@ export interface FieldSummary {
   totals: Map<ActivityType, number>;
 }
 
-export interface SummarizedField {
+export interface FieldConfig {
   fieldKey: PropertyOfType<SummaryActivity, number>;
   scaleLabel: string;
   transformation?: (data: number) => number;

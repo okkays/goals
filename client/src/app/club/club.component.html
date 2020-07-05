@@ -7,7 +7,7 @@
 
 <app-field-summary
   *ngFor="let field of displayedFields"
-  [dataObs]="summarizedFields.get(field.fieldKey)"
+  [dataObs]="fieldSummaries.get(field.fieldKey)"
   [field]="field"
   ></app-field-summary>
 

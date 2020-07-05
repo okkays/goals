@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ChartConfiguration } from 'chart.js';
 import { Observable } from 'rxjs';
 import { flatMap, map, shareReplay } from 'rxjs/operators';
-import { FieldSummary, SummarizedField } from '../field-data';
+import { FieldSummary, FieldConfig } from '../field-data';
 import { SummaryService } from '../summary.service';
 import { PropertyOfType } from '../common-util';
 import { SummaryActivity } from '../strava';
@@ -18,11 +18,11 @@ export class ClubComponent implements OnInit {
   elevationByTypeAndMember: Observable<FieldSummary[]>;
   elevationSummaryData: Observable<FieldSummary[]>;
   chartConfigurationObs: Observable<ChartConfiguration>;
-  summarizedFields: Map<
+  fieldSummaries: Map<
     PropertyOfType<SummaryActivity, number>,
     Observable<FieldSummary[]>
   >;
-  displayedFields: SummarizedField[] = [
+  displayedFields: FieldConfig[] = [
     {
       fieldKey: 'total_elevation_gain',
       scaleLabel: 'Elevation (meters)',
@@ -44,7 +44,7 @@ export class ClubComponent implements OnInit {
       shareReplay(1)
     );
 
-    this.summarizedFields = new Map<
+    this.fieldSummaries = new Map<
       PropertyOfType<SummaryActivity, number>,
       Observable<FieldSummary[]>
     >(
