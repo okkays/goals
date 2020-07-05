@@ -86,7 +86,7 @@ def parse_param(lines, index):
       name=name,
       required=required,
       kind=kind,
-      location=location,
+      location=location.strip(),
       description=description,
   )
   return param, index + 2
