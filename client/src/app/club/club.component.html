@@ -6,8 +6,9 @@
 </mat-card>
 
 <app-field-summary
-  [dataObs]="elevationByTypeAndMember"
-  scaleLabel="Elevation (meters)"
+  *ngFor="let field of displayedFields"
+  [dataObs]="summarizedFields.get(field.fieldKey)"
+  [field]="field"
   ></app-field-summary>
 
 <ng-template #loading>

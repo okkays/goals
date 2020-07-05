@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
-import { FieldSummary } from './club-data';
+import { FieldSummary } from './field-data';
 import { ActivityType, SummaryActivity } from './strava';
 import { athleteNameFromActivity } from './strava-util';
 import { StravaService } from './strava.service';

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FieldSummary } from '../club-data';
+import { FieldSummary, SummarizedField } from '../field-data';
 import { colorizeDatasets } from '../colorscheme';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -15,7 +15,7 @@ import { activityTypes, ActivityType } from '../strava';
 export class FieldSummaryComponent implements OnInit {
   @Input() dataObs!: Observable<FieldSummary[]>;
   chartConfigurationObs: Observable<ChartConfiguration>;
-  @Input() scaleLabel: string;
+  @Input() field: SummarizedField;
 
   private getConfig(data: FieldSummary[]): ChartConfiguration {
     const labels = data.map((d) => d.name);
@@ -23,11 +23,17 @@ export class FieldSummaryComponent implements OnInit {
       .map((activityType) => {
         return {
           label: activityType,
-          data: data.map((d) => d.totals.get(activityType)),
+          data: data.map((d) => {
+            const total = d.totals.get(activityType) || 0;
+            if (this.field.transformation) {
+              return this.field.transformation(total);
+            }
+            return total;
+          }),
         };
       })
       .filter((dataset) => {
-        return dataset.data.some((d) => d && d > 0);
+        return dataset.data.some((d) => d > 0);
       });
 
     colorizeDatasets(datasets);
@@ -53,8 +59,8 @@ export class FieldSummaryComponent implements OnInit {
                 color: chartColors.colors.blueGrey,
               },
               scaleLabel: {
-                display: !!this.scaleLabel,
-                labelString: this.scaleLabel,
+                display: !!this.field.scaleLabel,
+                labelString: this.field.scaleLabel,
               },
             },
           ],
