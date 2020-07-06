@@ -1,13 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ChartConfiguration } from 'chart.js';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject, combineLatest } from 'rxjs';
 import { flatMap, map, shareReplay } from 'rxjs/operators';
 import { FieldSummary, FieldConfig } from '../field-data';
 import { SummaryService } from '../summary.service';
 import { PropertyOfType } from '../common-util';
 import { SummaryActivity } from '../strava';
 import { StravaService } from '../strava.service';
+import * as moment from 'moment';
+
+interface ClubFilters {
+  startDate: moment.Moment;
+  endDate: moment.Moment;
+}
 
 @Component({
   selector: 'app-club',
@@ -41,6 +47,16 @@ export class ClubComponent implements OnInit {
     },
   ];
 
+  // Prevent super big queries eating API limits.
+  maxDate = moment().toDate();
+  minDate = moment().subtract(1, 'months').toDate();
+  filters = {
+    startDate: moment(this.maxDate).subtract(1, 'weeks').toDate(),
+    endDate: moment(this.maxDate).toDate(),
+  };
+
+  private readonly filtersSubject = new ReplaySubject<ClubFilters>(1);
+
   constructor(
     readonly route: ActivatedRoute,
     private readonly stravaService: StravaService,
@@ -68,12 +84,25 @@ export class ClubComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.applyFilters();
+  }
+
+  applyFilters() {
+    this.filtersSubject.next({
+      startDate: moment(this.filters.startDate),
+      endDate: moment(this.filters.endDate),
+    });
+  }
 
   private getField(fieldKey: PropertyOfType<SummaryActivity, number>) {
-    return this.idObs.pipe(
-      flatMap((id) => {
-        return this.summaryService.fieldByMember(id, fieldKey);
+    return combineLatest([this.idObs, this.filtersSubject]).pipe(
+      flatMap(([id, filters]) => {
+        return this.summaryService.fieldByMember(
+          id,
+          fieldKey,
+          filters.startDate
+        );
       }),
       shareReplay(1)
     );

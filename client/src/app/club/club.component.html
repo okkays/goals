@@ -5,6 +5,30 @@
   </p>
 </mat-card>
 
+<mat-card>
+  <mat-card-title>Filters</mat-card-title>
+
+  <mat-card-content>
+    <mat-form-field appearance="fill">
+      <mat-label>Activity Start Date</mat-label>
+      <input matInput [(ngModel)]="filters.startDate" [min]="minDate" [max]="maxDate" [matDatepicker]="startPicker">
+      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+      <mat-datepicker matInput #startPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Activity End Date</mat-label>
+      <input matInput [(ngModel)]="filters.endDate" [min]="minDate" [max]="maxDate" [matDatepicker]="endPicker">
+      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+      <mat-datepicker matInput #endPicker></mat-datepicker>
+    </mat-form-field>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button (click)="applyFilters()" mat-flat-button color="primary">Apply Filters</button>
+  </mat-card-actions>
+</mat-card>
+
 <app-field-summary
   *ngFor="let field of displayedFields"
   [dataObs]="fieldSummaries.get(field.fieldKey)"
