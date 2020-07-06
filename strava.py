@@ -42,7 +42,7 @@ def proxy(path):
   if flask.request.form:
     request_params['form'] = flask.request.form
   if flask.request.args:
-    request_params['args'] = flask.request.args
+    request_params['params'] = flask.request.args
   clean_path = path.lstrip('/')
   url = f'{API}/{clean_path}'
   logging.info('Strava: requesting %s', url)
