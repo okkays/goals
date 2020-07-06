@@ -22,8 +22,8 @@ class Rpc(object):
   method = attr.ib()
   route = attr.ib()
   params = attr.ib()
-  return_type = 'NOT_IMPLEMENTED'
-  sample_response = 'NOT_IMPLEMENTED'
+  return_type = attr.ib()
+  sample_response = attr.ib()
 
   def params_by_location(self, location):
     return [p for p in self.params if p.location == location]
@@ -56,11 +56,13 @@ class Enum(object):
   description = attr.ib()
   values = attr.ib()
 
+
 def next_index(lines, index):
   index += 1
   while len(lines) > index and not lines[index].strip():
     index += 1
   return index
+
 
 def parse_api(lines, first_header):
   index = 0
@@ -128,6 +130,30 @@ def skip_to_next_rpc(lines, index):
   return index
 
 
+def parse_rpc_sample_response(lines, index):
+  while lines[index].strip() != 'Sample Response':
+    index = next_index(lines, index)
+  index = next_index(lines, index)
+  sample_response = []
+  while not lines[index][0].isalpha():
+    sample_response.append(lines[index])
+    index = next_index(lines, index)
+  return ''.join(sample_response).rstrip(), index
+
+
+def parse_rpc_response(lines, index):
+  index = next_index(lines, index)  # Skip 'Responses'
+  description = lines[index].strip()[len('HTTP code 20x\t'):].rstrip('.')
+  type_start = description.rfind('An instance of')
+  if type_start > -1:
+    return description[type_start + len('An instance of '):], index
+  array_start = description.rfind('An array of')
+  if array_start > -1:
+    kind = description[array_start + len('An array of '):-len(' objects')]
+    return f'{kind}[]', index
+  return 'unknown', index
+
+
 def parse_rpc(lines, index):
   name, key = parse_rpc_name(lines[index].strip())
   index = next_index(lines, index)
@@ -141,6 +167,8 @@ def parse_rpc(lines, index):
   route = lines[index].strip()
   index = next_index(lines, index)
   params, index = parse_rpc_params(lines, index)
+  return_type, index = parse_rpc_response(lines, index)
+  sample_response, index = parse_rpc_sample_response(lines, index)
   index = skip_to_next_rpc(lines, index)
   rpc = Rpc(
       name=name,
@@ -149,6 +177,8 @@ def parse_rpc(lines, index):
       method=method,
       route=route,
       params=params,
+      return_type=return_type,
+      sample_response=sample_response,
   )
   return rpc, index
 
@@ -220,7 +250,7 @@ def tsify_rpc_abstract(rpc):
 def tsify_rpc_mock(rpc):
   return f"""{tsify_rpc_signature(rpc)} {{
       return of(
-        {rpc.sample_response} as {rpc.return_type}
+        {rpc.sample_response} as unknown as {rpc.return_type}
       )
     }}"""
 
@@ -266,6 +296,7 @@ def tsify_rpc_signature(rpc):
 def tsify_imports(api):
   models = ', '.join([model.name for model in api.models])
   return f"import {{ {models} }} from './{api.name.lower()}';"
+
 
 def tsify_service_mock(api):
   title = api.name.title()
@@ -343,6 +374,7 @@ def tsify_api(api):
     f.write(service_mock)
   print('wrote data')
 
+
 def tsify_kind(kind):
   if kind.startswith('array'):
     inner_start = kind.find('[') + 1
@@ -352,9 +384,12 @@ def tsify_kind(kind):
   lowerkind = kind.lower()
   if lowerkind in ['datetime', 'date']:
     return 'string'
+  if lowerkind == 'long':
+    return 'bigint'
   if lowerkind in ['integer', 'long', 'float', 'double']:
     return 'number'
   return kind
+
 
 def tsify_model(model):
   if isinstance(model, Enum):
