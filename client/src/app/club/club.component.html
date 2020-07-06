@@ -1,8 +1,8 @@
 <mat-card>
-  <mat-card-title>Club Details</mat-card-title>
-  <ng-container>
-    Super Cool Group #{{idObs | async}}
-  </ng-container>
+  <mat-card-title>Club Details: {{clubNameObs | async}}</mat-card-title>
+  <p>
+    #{{idObs | async}}
+  </p>
 </mat-card>
 
 <app-field-summary

@@ -7,6 +7,7 @@ import { FieldSummary, FieldConfig } from '../field-data';
 import { SummaryService } from '../summary.service';
 import { PropertyOfType } from '../common-util';
 import { SummaryActivity } from '../strava';
+import { StravaService } from '../strava.service';
 
 @Component({
   selector: 'app-club',
@@ -15,9 +16,8 @@ import { SummaryActivity } from '../strava';
 })
 export class ClubComponent implements OnInit {
   idObs: Observable<bigint>;
-  elevationByTypeAndMember: Observable<FieldSummary[]>;
-  elevationSummaryData: Observable<FieldSummary[]>;
   chartConfigurationObs: Observable<ChartConfiguration>;
+  clubNameObs: Observable<ChartConfiguration>;
   fieldSummaries: Map<
     PropertyOfType<SummaryActivity, number>,
     Observable<FieldSummary[]>
@@ -43,11 +43,19 @@ export class ClubComponent implements OnInit {
 
   constructor(
     readonly route: ActivatedRoute,
+    private readonly stravaService: StravaService,
     private readonly summaryService: SummaryService
   ) {
     this.idObs = route.paramMap.pipe(
       map((params) => BigInt(params.get('id'))),
       shareReplay(1)
+    );
+
+    this.clubNameObs = this.idObs.pipe(
+      flatMap((id) => {
+        return this.stravaService.getClubById(id);
+      }),
+      map((detailedClub) => detailedClub.name)
     );
 
     this.fieldSummaries = new Map<
