@@ -226,13 +226,20 @@ def tsify_rpc_mock(rpc):
 
 
 def tsify_rpc_http(rpc):
+  query_params = rpc.params_by_location('in query')
   route = rpc.route.replace('{', '${')
+  if query_params:
+    params_decl = "const params = toParams(query);"
+    params_option = "params,"
+  else:
+    params_decl = ""
+    params_option = ""
   return f"""{tsify_rpc_signature(rpc)} {{
-      const params = toParams(query);
+      {params_decl}
       return this.httpClient.{rpc.method.lower()}<{rpc.return_type}>(
-        `{API_PREFIX}{route}`
+        `{API_PREFIX}{route}`,
         {{
-          params,
+          {params_option}
         }}
       );
     }}"""
@@ -354,7 +361,6 @@ def tsify_model(model):
   # Special cases.
   if model.description.startswith('A collection of'):
     kind = model.description[len('A collection of '):].lstrip('#/').split(' ')[0]
-    print('boop', kind)
     ts_body = f'type {model.name} = {tsify_kind(kind)}[];'
   else:
     tsified_fields = "\n".join(tsify_field(field) for field in model.fields)
