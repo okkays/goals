@@ -12,7 +12,6 @@ import * as moment from 'moment';
 
 interface ClubFilters {
   startDate: moment.Moment;
-  endDate: moment.Moment;
 }
 
 @Component({
@@ -52,7 +51,6 @@ export class ClubComponent implements OnInit {
   minDate = moment().subtract(1, 'months').toDate();
   filters = {
     startDate: moment(this.maxDate).subtract(1, 'weeks').toDate(),
-    endDate: moment(this.maxDate).toDate(),
   };
 
   private readonly filtersSubject = new ReplaySubject<ClubFilters>(1);
@@ -91,7 +89,6 @@ export class ClubComponent implements OnInit {
   applyFilters() {
     this.filtersSubject.next({
       startDate: moment(this.filters.startDate),
-      endDate: moment(this.filters.endDate),
     });
   }
 

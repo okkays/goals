@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
+import { Observable, of, combineLatest, EMPTY } from 'rxjs';
+import { flatMap, map, expand } from 'rxjs/operators';
 import { FieldSummary } from './field-data';
 import { ActivityType, SummaryActivity } from './strava';
 import { athleteNameFromActivity } from './strava-util';
 import { StravaService } from './strava.service';
 import { PropertyOfType } from './common-util';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root',
@@ -35,11 +36,24 @@ export class SummaryService {
     );
   }
 
+  getClubActivitiesSince(
+    clubId: bigint,
+    after: moment.Moment,
+    page: number = 1
+  ): Observable<SummaryActivity[]> {
+    return this.stravaService.getClubActivitiesById(clubId, {
+      after: after.unix(),
+      page,
+      per_page: 200,
+    });
+  }
+
   fieldByMember(
     clubId: bigint,
-    field: PropertyOfType<SummaryActivity, number>
+    field: PropertyOfType<SummaryActivity, number>,
+    after: moment.Moment
   ): Observable<FieldSummary[]> {
-    return this.stravaService.getClubActivitiesById(clubId).pipe(
+    return this.getClubActivitiesSince(clubId, after).pipe(
       flatMap((clubActivities) => {
         return this.getSummary(clubActivities, field);
       })

@@ -1,6 +1,7 @@
 import {
   Component,
   AfterViewInit,
+  OnChanges,
   Input,
   ViewChild,
   ElementRef,
@@ -15,13 +16,21 @@ Chart.defaults.global.maintainAspectRatio = false;
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css'],
 })
-export class ChartComponent implements AfterViewInit {
+export class ChartComponent implements AfterViewInit, OnChanges {
   @Input() chartConfiguration!: ChartConfiguration;
   chart?: Chart;
 
   @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
 
   constructor() {}
+
+  ngOnChanges() {
+    const context = this.canvas.nativeElement.getContext('2d');
+    if (!context) {
+      throw new TypeError("Couldn't get the canvas context");
+    }
+    this.chart = new Chart(context, this.chartConfiguration);
+  }
 
   ngAfterViewInit(): void {
     if (!this.canvas) {
