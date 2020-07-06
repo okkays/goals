@@ -1,7 +1,9 @@
 import { SummaryActivity, ActivityType } from './strava';
+import { MetaAthlete } from './strava-override';
 
 export function athleteNameFromActivity(activity: SummaryActivity): string {
-  return `${activity.athlete.firstname} ${activity.athlete.lastname}`;
+  const athlete = (activity.athlete as unknown) as MetaAthlete;
+  return `${athlete.firstname} ${athlete.lastname}`;
 }
 
 export declare interface ActivityFilters {

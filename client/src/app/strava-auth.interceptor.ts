@@ -7,9 +7,9 @@ import {
   HttpClient,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PROXY, ROOT } from './strava-http.service';
 import { SummaryAthlete } from './strava';
 import { catchError, retryWhen, delay, take, flatMap } from 'rxjs/operators';
+import { PROXY, ROOT } from './api-util';
 
 @Injectable()
 export class StravaAuthInterceptor implements HttpInterceptor {

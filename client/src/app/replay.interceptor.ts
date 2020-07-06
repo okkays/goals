@@ -7,7 +7,7 @@ import {
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
-import { PROXY } from './strava-http.service';
+import { PROXY } from './api-util';
 
 @Injectable()
 export class ReplayInterceptor implements HttpInterceptor {

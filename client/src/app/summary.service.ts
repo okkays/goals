@@ -36,7 +36,7 @@ export class SummaryService {
   }
 
   fieldByMember(
-    clubId: number,
+    clubId: bigint,
     field: PropertyOfType<SummaryActivity, number>
   ): Observable<FieldSummary[]> {
     return this.stravaService.getClubActivitiesById(clubId).pipe(

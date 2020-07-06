@@ -343,7 +343,7 @@ def tsify_service_http(api):
 
     /** HTTP Service for {api.name} API. */
     @Injectable({{ providedIn: 'root', }})
-    export class {title}MockService extends {title}Service {{
+    export class {title}HttpService extends {title}Service {{
       constructor(private readonly httpClient: HttpClient) {{
         super();
       }}
@@ -364,13 +364,14 @@ def tsify_api(api):
   service_http = tsify_service_http(api)
   service_mock = tsify_service_mock(api)
 
-  with open(f'{api.name.lower()}.ts', 'w') as f:
+  prefix = 'client/src/app/'
+  with open(f'{prefix}{api.name.lower()}.ts', 'w') as f:
     f.write(data)
-  with open(f'{api.name.lower()}.service.ts', 'w') as f:
+  with open(f'{prefix}{api.name.lower()}.service.ts', 'w') as f:
     f.write(service_abstract)
-  with open(f'{api.name.lower()}-http.service.ts', 'w') as f:
+  with open(f'{prefix}{api.name.lower()}-http.service.ts', 'w') as f:
     f.write(service_http)
-  with open(f'{api.name.lower()}-mock.service.ts', 'w') as f:
+  with open(f'{prefix}{api.name.lower()}-mock.service.ts', 'w') as f:
     f.write(service_mock)
   print('wrote data')
 
@@ -382,8 +383,10 @@ def tsify_kind(kind):
     inner_kind = kind[inner_start:inner_stop]
     return f'{tsify_kind(inner_kind)}[]'
   lowerkind = kind.lower()
-  if lowerkind in ['datetime', 'date']:
+  if lowerkind in ['datetime', 'date', 'string']:
     return 'string'
+  if lowerkind in ['boolean']:
+    return 'boolean'
   if lowerkind == 'long':
     return 'bigint'
   if lowerkind in ['integer', 'long', 'float', 'double']:
@@ -414,8 +417,8 @@ def tsify_field(field):
 
 
 def tsify_enum(enum):
-  formatted_values = [f"'{value}', " for value in enum.values]
-  camel_name = enum.name[0].lower() + enum.name[1]
+  formatted_values = ''.join([f"'{value}', " for value in enum.values])
+  camel_name = enum.name[0].lower() + enum.name[1:] + 's'
   return f"""/** {enum.description} */
     export const {camel_name} = [
       {formatted_values}

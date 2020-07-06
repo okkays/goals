@@ -14,7 +14,7 @@ import { SummaryActivity } from '../strava';
   styleUrls: ['./club.component.css'],
 })
 export class ClubComponent implements OnInit {
-  idObs: Observable<number>;
+  idObs: Observable<bigint>;
   elevationByTypeAndMember: Observable<FieldSummary[]>;
   elevationSummaryData: Observable<FieldSummary[]>;
   chartConfigurationObs: Observable<ChartConfiguration>;
@@ -46,7 +46,7 @@ export class ClubComponent implements OnInit {
     private readonly summaryService: SummaryService
   ) {
     this.idObs = route.paramMap.pipe(
-      map((params) => Number(params.get('id'))),
+      map((params) => BigInt(params.get('id'))),
       shareReplay(1)
     );
 
