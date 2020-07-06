@@ -937,6 +937,10 @@ export class StravaMockService extends StravaService {
     /** The identifier of the club. */
     id: bigint,
     query?: {
+      /** Epoch in seconds. Only specify one of before or after. */
+      before?: number;
+      /** Epoch in seconds. Only specify one of before or after. */
+      after?: number;
       /** Page number. Defaults to 1. */
       page?: number;
       /** Number of items per page. Defaults to 30. */
