@@ -264,7 +264,8 @@ def tsify_rpc_signature(rpc):
 
 
 def tsify_imports(api):
-  pass
+  models = ', '.join([model.name for model in api.models])
+  return f"import {{ {models} }} from './{api.name.lower()}';"
 
 def tsify_service_mock(api):
   title = api.name.title()
@@ -361,7 +362,7 @@ def tsify_model(model):
   # Special cases.
   if model.description.startswith('A collection of'):
     kind = model.description[len('A collection of '):].lstrip('#/').split(' ')[0]
-    ts_body = f'type {model.name} = {tsify_kind(kind)}[];'
+    ts_body = f'export type {model.name} = {tsify_kind(kind)}[];'
   else:
     tsified_fields = "\n".join(tsify_field(field) for field in model.fields)
     ts_body = f"""export declare interface {model.name} {{
