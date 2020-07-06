@@ -17,7 +17,7 @@ import { StravaService } from '../strava.service';
 export class ClubComponent implements OnInit {
   idObs: Observable<bigint>;
   chartConfigurationObs: Observable<ChartConfiguration>;
-  clubNameObs: Observable<ChartConfiguration>;
+  clubNameObs: Observable<string>;
   fieldSummaries: Map<
     PropertyOfType<SummaryActivity, number>,
     Observable<FieldSummary[]>
