@@ -11,15 +11,11 @@
   <mat-card-content>
     <mat-form-field appearance="fill">
       <mat-label>Show Activities Since</mat-label>
-      <input matInput [(ngModel)]="filters.startDate" [min]="minDate" [max]="maxDate" [matDatepicker]="startPicker">
+      <input matInput [(ngModel)]="filters.startDate" (dateChange)="applyFilters()" [min]="minDate" [max]="maxDate" [matDatepicker]="startPicker">
       <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
       <mat-datepicker matInput #startPicker></mat-datepicker>
     </mat-form-field>
   </mat-card-content>
-
-  <mat-card-actions>
-    <button (click)="applyFilters()" mat-flat-button color="primary">Apply Filters</button>
-  </mat-card-actions>
 </mat-card>
 
 <app-field-summary

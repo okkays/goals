@@ -25,6 +25,9 @@ export class ChartComponent implements AfterViewInit, OnChanges {
   constructor() {}
 
   ngOnChanges() {
+    if (!this.canvas) {
+      return;
+    }
     const context = this.canvas.nativeElement.getContext('2d');
     if (!context) {
       throw new TypeError("Couldn't get the canvas context");
