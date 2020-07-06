@@ -1,11 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import {
   HTTP_INTERCEPTORS,
   HttpClient,
   HttpClientModule,
 } from '@angular/common/http';
 
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ChartComponent } from './chart/chart.component';
@@ -31,6 +33,7 @@ import { ClubComponent } from './club/club.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    FormsModule,
     MaterialModule,
     HttpClientModule,
   ],
@@ -58,6 +61,10 @@ import { ClubComponent } from './club/club.component';
       provide: HTTP_INTERCEPTORS,
       useClass: StravaAuthInterceptor,
       multi: true,
+    },
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: { appearance: 'fill' },
     },
   ],
   bootstrap: [AppComponent],
