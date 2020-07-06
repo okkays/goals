@@ -44,13 +44,13 @@ class RpcTest(unittest.TestCase):
       "start_date_local\n",
       "Date, in query\tISO 8601 formatted date time.\n",
       "Responses\n",
-      "SomeNextRpc",
+      "Some Next Rpc (getNextRpc)",
       "\n",
   ]
 
   def test_populates(self):
     rpc, index = parse_api.parse_rpc(self.example, 2)
-    self.assertEqual(index, 12)
+    self.assertEqual(index, 13)
     self.assertEqual(rpc.name, 'List Athlete Activities')
     self.assertEqual(rpc.key, 'getLoggedInAthleteActivities')
     self.assertEqual(rpc.description, 'Returns the activities of an athlete for a specific identifier.')
@@ -86,10 +86,10 @@ class EnumTest(unittest.TestCase):
   ]
 
   def test_populates(self):
-    enum, index = parse_api.parse_enum(self.example, 2)
+    enum, index = parse_api.parse_enum(self.example, 5, 'ActivityType', 'Desc')
     self.assertEqual(index, 7)
     self.assertEqual(enum.name, 'ActivityType')
-    self.assertEqual(enum.description, 'An enumeration of the types an activity may have.')
+    self.assertEqual(enum.description, 'Desc')
     self.assertEqual(enum.values, [
         "AlpineSki", "BackcountrySki", "Canoeing", "Crossfit", "EBikeRide",
         "Elliptical", "Golf", "Handcycle", "Hike", "IceSkate", "InlineSkate",

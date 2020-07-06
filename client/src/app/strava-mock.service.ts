@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { StravaService } from './strava.service';
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { SummaryActivity } from './strava';
 import { Observable, of } from 'rxjs';
 
@@ -8,13 +7,9 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root',
 })
 export class StravaMockService extends StravaService {
-  constructor() {
-    super();
-  }
-
   getClubActivitiesById(
     id: number,
-    options?: { page?: number; per_page?: number }
+    query?: { page?: number; per_page?: number }
   ): Observable<SummaryActivity[]> {
     return of([
       {
