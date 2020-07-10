@@ -9,7 +9,7 @@ import strava
 load_dotenv()
 
 app = flask.Flask(__name__,
-                  static_folder='client/dist/client', static_url_path='/v1/')
+                  static_folder='dist/client', static_url_path='/v1/')
 app.register_blueprint(strava.blueprint)
 
 if app.config['DEBUG']:
@@ -36,9 +36,9 @@ def serve_angular(path):
       path.lstrip('/')
     ])
     return flask.redirect(target)
-  return flask.send_from_directory('client/dist/client', path)
+  return flask.send_from_directory('dist/client', path)
 
 @app.errorhandler(404)
 def serve_angular_routing(error):
   del error
-  return flask.send_file('client/dist/client/index.html')
+  return flask.send_file('dist/client/index.html')
