@@ -4,11 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "gunicorn app:app",
-    "build": "ng build",
+    "build": "ng build --prod=true --output-path dist",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "postinstall": "ng build --prod=true --output-path dist"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
