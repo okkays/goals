@@ -9,7 +9,6 @@ blueprint = flask.Blueprint('strava', __name__, url_prefix="/strava")
 
 STRAVA_CLIENT_ID = os.getenv('STRAVA_CLIENT_ID')
 STRAVA_CLIENT_SECRET = os.getenv('STRAVA_CLIENT_SECRET')
-HOSTNAME = os.getenv("HOSTNAME")
 API = 'https://www.strava.com/api/v3';
 
 you_may_close = """
@@ -89,7 +88,8 @@ def refresh_token(old_secret):
 
 
 def new_login():
-  redirect_uri = f'{HOSTNAME}/strava/oauth2_callback'
+  API_URL = flask.current_app.config.get('API_URL')
+  redirect_uri = f'{API_URL}/strava/oauth2_callback'
   scope = 'activity:read'
   return flask.redirect('https://www.strava.com/oauth/authorize?' +
                         f'client_id={STRAVA_CLIENT_ID}' +
