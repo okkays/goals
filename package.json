@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "gunicorn app:app",
-    "build": "ng build --prod=true --output-path dist",
+    "build": "ng build --prod=true",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
