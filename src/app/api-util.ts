@@ -1,8 +1,5 @@
 import { HttpParams } from '@angular/common/http';
 
-export const ROOT = 'http://localhost:5000/strava';
-export const PROXY = `${ROOT}/proxy`;
-
 /** Converts a query object to an HttpParams. */
 export function toParams(query?: Record<string, unknown | unknown[]>) {
   if (!query) {

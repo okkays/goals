@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  strava_api_url: 'http://raybeam-goals.herokuapp.com/strava',
 };
