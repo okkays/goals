@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { environment } from './../environments/environment';
 
 export const ROOT = environment.strava_api_url;
-export const PROXY = `${environment.strava_api_url}/PROXY`;
+export const PROXY = `${environment.strava_api_url}/proxy`;
 
 /** Converts a query object to an HttpParams. */
 export function toParams(query?: Record<string, unknown | unknown[]>) {
