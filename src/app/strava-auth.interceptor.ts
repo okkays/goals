@@ -9,7 +9,7 @@ import {
 import { Observable } from 'rxjs';
 import { SummaryAthlete } from './strava';
 import { catchError, retryWhen, delay, take, flatMap } from 'rxjs/operators';
-import { environment } from '../environments/environment';
+import { PROXY, ROOT } from './api-util';
 
 @Injectable()
 export class StravaAuthInterceptor implements HttpInterceptor {
@@ -20,7 +20,7 @@ export class StravaAuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     // Only intercept Strava proxy requests.
-    if (!request.url.startsWith(`${environment.strava_api_url}/proxy`)) {
+    if (!request.url.startsWith(PROXY)) {
       return next.handle(request);
     }
 
@@ -35,15 +35,15 @@ export class StravaAuthInterceptor implements HttpInterceptor {
     // Inject the client to avoid a circular injection.
     const httpClient = this.injector.get(HttpClient);
     return httpClient
-      .get<SummaryAthlete>(`${environment.strava_api_url}/user`, {
+      .get<SummaryAthlete>(`${ROOT}/user`, {
         withCredentials: true,
       })
       .pipe(
         catchError((err) => {
           console.error(err);
-          window.open(`${environment.strava_api_url}/login`);
+          window.open(`${ROOT}/login`);
           return httpClient
-            .get<SummaryAthlete>(`${environment.strava_api_url}/user`, {
+            .get<SummaryAthlete>(`${ROOT}/user`, {
               withCredentials: true,
             })
             .pipe(retryWhen((errors) => errors.pipe(delay(1000), take(600))));
