@@ -73,6 +73,12 @@ def user():
   return flask.jsonify(user)
 
 
+def handle_errors(secret):
+  if 'errors' in secret:
+    message = secret.get('message', 'Unknown Error')
+    errors = ', '.join(secret.get('errors', ['🤷']))
+    flask.abort(403, secret.get('message', f'{message}: {errors}'))
+
 def refresh_token(old_secret):
   secret = requests.post('https://www.strava.com/oauth/token',
                          {
@@ -81,10 +87,7 @@ def refresh_token(old_secret):
                              'grant_type': 'refresh_token',
                              'refresh_token': old_secret.get('refresh_token'),
                          })
-  if 'errors' in secret:
-    message = secret.get('message', 'Unknown Error')
-    errors = ', '.join(secret.get('errors', ['🤷']))
-    flask.abort(403, secret.get('message', f'{message}: {errors}'))
+  handle_errors(secret)
   flask.session['secret'] = secret
   return you_may_close
 
@@ -114,7 +117,6 @@ def oauth2_callback():
                              'code': code,
                              'grant_type': 'authorization_code',
                          }).json()
-  if 'errors' in secret:
-    flask.abort(400, secret.get('message', 'Unknown Error'))
+  handle_errors(secret)
   flask.session['secret'] = secret
   return you_may_close
