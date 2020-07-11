@@ -11,6 +11,8 @@ import { SummaryAthlete } from './strava';
 import { catchError, retryWhen, delay, take, flatMap } from 'rxjs/operators';
 import { PROXY, ROOT } from './api-util';
 
+let loginOpened = false;
+
 @Injectable()
 export class StravaAuthInterceptor implements HttpInterceptor {
   constructor(private injector: Injector) {}
@@ -41,7 +43,10 @@ export class StravaAuthInterceptor implements HttpInterceptor {
       .pipe(
         catchError((err) => {
           console.error(err);
-          window.open(`${ROOT}/login`);
+          if (!loginOpened) {
+            loginOpened = true;
+            window.open(`${ROOT}/login`);
+          }
           return httpClient
             .get<SummaryAthlete>(`${ROOT}/user`, {
               withCredentials: true,
