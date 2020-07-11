@@ -84,7 +84,7 @@ def refresh_token(old_secret):
   if 'errors' in secret:
     message = secret.get('message', 'Unknown Error')
     errors = ', '.join(secret.get('errors', ['🤷']))
-    flask.abort(403, secret.get('message', f'{message}: {errors}))
+    flask.abort(403, secret.get('message', f'{message}: {errors}'))
   flask.session['secret'] = secret
   return you_may_close
 
