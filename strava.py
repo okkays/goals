@@ -9,7 +9,7 @@ blueprint = flask.Blueprint('strava', __name__, url_prefix="/strava")
 
 STRAVA_CLIENT_ID = os.getenv('STRAVA_CLIENT_ID')
 STRAVA_CLIENT_SECRET = os.getenv('STRAVA_CLIENT_SECRET')
-API = 'https://www.strava.com/api/v3';
+STRAVA_API = 'https://www.strava.com/api/v3';
 
 you_may_close = """
 <script>
@@ -43,7 +43,7 @@ def proxy(path):
   if flask.request.args:
     request_params['params'] = flask.request.args
   clean_path = path.lstrip('/')
-  url = f'{API}/{clean_path}'
+  url = f'{STRAVA_API}/{clean_path}'
   logging.info('Strava: requesting %s', url)
   proxy_response = requests.request(
     method, url, **request_params)
@@ -80,7 +80,7 @@ def handle_errors(secret):
     flask.abort(403, f'{message}: {errors}')
 
 def refresh_token(old_secret):
-  secret = requests.post('https://www.strava.com/oauth/token',
+  secret = requests.post(f'{STRAVA_API}/oauth/token',
                          {
                              'client_id': STRAVA_CLIENT_ID,
                              'client_secret': STRAVA_CLIENT_SECRET,
@@ -96,7 +96,7 @@ def new_login():
   API_URL = flask.current_app.config.get('API_URL')
   redirect_uri = f'{API_URL}/strava/oauth2_callback'
   scope = 'activity:read'
-  return flask.redirect('https://www.strava.com/oauth/authorize?' +
+  return flask.redirect(f'{STRAVA_API}/oauth/authorize?' +
                         f'client_id={STRAVA_CLIENT_ID}' +
                         f'&redirect_uri={redirect_uri}' +
                         f'&response_type=code' +
@@ -110,7 +110,7 @@ def oauth2_callback():
     flask.abort(502, error)
   code = flask.request.args.get('code')
   scope = flask.request.args.get('scope')
-  secret = requests.post('https://www.strava.com/oauth/token',
+  secret = requests.post(f'{STRAVA_API}/oauth/token',
                          {
                              'client_id': STRAVA_CLIENT_ID,
                              'client_secret': STRAVA_CLIENT_SECRET,
