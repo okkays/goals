@@ -77,7 +77,7 @@ def handle_errors(secret):
   if 'errors' in secret:
     message = secret.get('message', 'Unknown Error')
     errors = str(secret.get('errors', '🤷'))
-    flask.abort(403, secret.get('message', f'{message}: {errors}'))
+    flask.abort(403, f'{message}: {errors}')
 
 def refresh_token(old_secret):
   secret = requests.post('https://www.strava.com/oauth/token',
