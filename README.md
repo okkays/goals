@@ -1,27 +1,24 @@
-# Client
+Deploys to [Heroku](https://raybeam-goals.herokuapp.com/club/214176) on master push.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.9.
+Shows graphs of Strava data.
 
-## Development server
+Uses a flask server that handles auth and acts as a proxy to make API calls.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+To get started:
 
-## Code scaffolding
+- Follow instructions in example.env
+- Optionally modify environment.ts
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+To run in development mode:
 
-## Build
+- Set FLASK_ENV to development in .env
+- `python -m flask run`
+- `ng serve`
+- navigate to http://localhost:5000 (or whatever your flask instance is)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+To run in production mode:
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+- Set FLASK_ENV to production in .env
+- `ng build --prod`
+- `gunicorn app:app`
+- navigate to http://localhost:5000 (or whatever your flask instance is)
