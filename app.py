@@ -33,12 +33,8 @@ def serve_angular(path):
   if flask.current_app.config['DEBUG']:
     target = '/'.join([
       flask.current_app.config['ORIGIN'].rstrip('/'),
+      app.static_url_path.strip('/'),
       path.lstrip('/')
     ])
     return flask.redirect(target)
   return flask.send_from_directory('dist/client', path)
-
-@app.errorhandler(404)
-def serve_angular_routing(error):
-  del error
-  return flask.send_file('dist/client/index.html')

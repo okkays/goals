@@ -82,7 +82,9 @@ def refresh_token(old_secret):
                              'refresh_token': old_secret.get('refresh_token'),
                          })
   if 'errors' in secret:
-    flask.abort(400, secret.get('message', 'Unknown Error'))
+    message = secret.get('message', 'Unknown Error')
+    errors = ', '.join(secret.get('errors', ['🤷']))
+    flask.abort(403, secret.get('message', f'{message}: {errors}))
   flask.session['secret'] = secret
   return you_may_close
 
